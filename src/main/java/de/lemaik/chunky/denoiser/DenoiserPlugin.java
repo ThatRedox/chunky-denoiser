@@ -1,5 +1,6 @@
 package de.lemaik.chunky.denoiser;
 
+import de.lemaik.chunky.oidn.OpenImageDenoise;
 import se.llbit.chunky.Plugin;
 import se.llbit.chunky.main.Chunky;
 import se.llbit.chunky.main.ChunkyOptions;
@@ -15,9 +16,11 @@ public class DenoiserPlugin implements Plugin {
 
     @Override
     public void attach(Chunky chunky) {
+        OpenImageDenoise.load("C:\\Users\\co2c6\\Documents\\oidn-1.3.0.x64.vc14.windows\\bin\\OpenImageDenoise.dll");
+
         DenoiserSettings settings = new DenoiserSettings();
 //        Denoiser denoiser = new OidnBinaryDenoiser();
-        Denoiser denoiser = new Oidn4jDenoiser();
+        Denoiser denoiser = new OidnJnaDenoiser();
 
         DenoisedPathTracingRenderer denoisedPathTracer = new DenoisedPathTracingRenderer(
                 settings, denoiser,
