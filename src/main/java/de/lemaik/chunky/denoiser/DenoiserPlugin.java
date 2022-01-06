@@ -27,6 +27,15 @@ public class DenoiserPlugin implements Plugin {
         );
         Chunky.addRenderer(denoisedPathTracer);
 
+        DenoisedPathTracingPreviewRenderer denoisedPreview = new DenoisedPathTracingPreviewRenderer(
+                settings, denoiser,
+                "DenoisedPreview",
+                "DenoisedPreview",
+                "DenoisedPreview",
+                new PathTracer()
+        );
+        Chunky.addPreviewRenderer(denoisedPreview);
+
         DenoiserPassRenderer inPlaceDenoisingRenderer = new DenoiserPassRenderer(
                 settings, denoiser,
                 DENOISER_RENDERER_ID,
