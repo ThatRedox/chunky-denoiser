@@ -16,7 +16,8 @@ public class DenoiserPlugin implements Plugin {
     @Override
     public void attach(Chunky chunky) {
         DenoiserSettings settings = new DenoiserSettings();
-        Denoiser denoiser = new OidnBinaryDenoiser();
+//        Denoiser denoiser = new OidnBinaryDenoiser();
+        Denoiser denoiser = new Oidn4jDenoiser();
 
         DenoisedPathTracingRenderer denoisedPathTracer = new DenoisedPathTracingRenderer(
                 settings, denoiser,
