@@ -10,9 +10,11 @@ import se.llbit.chunky.ui.render.RenderControlsTab;
 public class DenoiserTabImpl implements RenderControlsTab {
     protected final DenoiserSettings settings;
     protected Scene scene;
+    protected final Runnable reloadDenoiser;
 
-    public DenoiserTabImpl(DenoiserSettings settings) {
+    public DenoiserTabImpl(DenoiserSettings settings, Runnable reloadDenoiser) {
         this.settings = settings;
+        this.reloadDenoiser = reloadDenoiser;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class DenoiserPlugin implements Plugin {
     @Override
     public void attach(Chunky chunky) {
         DenoiserSettings settings = new DenoiserSettings();
-        Denoiser denoiser = new OidnJnaDenoiser(PersistentSettings.settings.getString("oidnPath", ""));
+        OidnJnaDenoiser denoiser = new OidnJnaDenoiser(PersistentSettings.settings.getString("oidnPath", ""));
 
         DenoisedPathTracingRenderer denoisedPathTracer = new DenoisedPathTracingRenderer(
                 settings, denoiser,
@@ -49,7 +49,8 @@ public class DenoiserPlugin implements Plugin {
         RenderControlsTabTransformer prev = chunky.getRenderControlsTabTransformer();
         chunky.setRenderControlsTabTransformer(tabs -> {
             tabs = prev.apply(tabs);
-            tabs.add(new DenoiserTabImpl(settings));
+            tabs.add(new DenoiserTabImpl(settings, () ->
+                    denoiser.setDenoiserLibrary(PersistentSettings.settings.getString("oidnPath", ""))));
             return tabs;
         });
     }

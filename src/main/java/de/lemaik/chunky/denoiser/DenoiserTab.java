@@ -90,6 +90,7 @@ public class DenoiserTab implements Initializable {
             if (denoiser != null) {
                 PersistentSettings.setStringOption("oidnPath", denoiser.getAbsolutePath());
                 denoiserPath.setText(denoiser.getAbsolutePath());
+                impl.reloadDenoiser.run();
             }
         });
 
