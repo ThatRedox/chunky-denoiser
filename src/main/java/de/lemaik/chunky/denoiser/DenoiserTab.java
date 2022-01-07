@@ -79,7 +79,7 @@ public class DenoiserTab implements Initializable {
         denoiserPath.setText(PersistentSettings.settings.getString("oidnPath", ""));
         selectPath.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Select denoiser executable");
+            fileChooser.setTitle("Select denoiser library");
             if (!denoiserPath.getText().isEmpty()) {
                 File currentDenoiserPath = new File(denoiserPath.getText());
                 if (currentDenoiserPath.exists()) {

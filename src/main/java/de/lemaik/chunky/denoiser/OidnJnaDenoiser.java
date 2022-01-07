@@ -6,14 +6,18 @@ import io.github.ThatRedox.OidnJna.Filter;
 import io.github.ThatRedox.OidnJna.OpenImageDenoise;
 
 public class OidnJnaDenoiser implements Denoiser {
-    private final OpenImageDenoise denoiser;
+    private OpenImageDenoise denoiser;
 
-    public OidnJnaDenoiser(OpenImageDenoise denoiser) {
-        this.denoiser = denoiser;
+    public OidnJnaDenoiser(String path) {
+        this.setDenoiserLibrary(path);
+    }
+
+    public void setDenoiserLibrary(String path) {
+        this.denoiser = new OpenImageDenoise(path);
     }
 
     @Override
-    public float[] denoise(int width, int height, float[] beauty, float[] albedo, float[] normal) {
+    public float[] denoise(int width, int height, float[] beauty, float[] albedo, float[] normal) throws DenoisingFailedException {
         float[] output;
         try (Device device = denoiser.createDevice()) {
             device.commit();
@@ -52,6 +56,8 @@ public class OidnJnaDenoiser implements Denoiser {
             beautyBuffer.close();
             if (albedoBuffer != null) albedoBuffer.close();
             if (normalBuffer != null) normalBuffer.close();
+        } catch (UnsatisfiedLinkError e) {
+            throw new DenoisingFailedException("Invalid denoiser library path.", e);
         }
 
         return output;

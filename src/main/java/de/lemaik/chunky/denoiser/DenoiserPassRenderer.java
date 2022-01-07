@@ -19,12 +19,14 @@ public class DenoiserPassRenderer extends MultiPassRenderer {
     protected final String description;
 
     protected final RayTracer albedoTracer = new AlbedoTracer();
-    protected final RayTracer normalTracer = new NormalTracer();
+    protected final RayTracer normalTracer;
 
     public DenoiserPassRenderer(DenoiserSettings settings, Denoiser denoiser,
                                 String id, String name, String description) {
         this.settings = settings;
         this.denoiser = denoiser;
+
+        this.normalTracer = new NormalTracer(settings);
 
         this.id = id;
         this.name = name;
@@ -102,9 +104,6 @@ public class DenoiserPassRenderer extends MultiPassRenderer {
         }
 
         if (!aborted) {
-            if (denoiser instanceof OidnBinaryDenoiser)
-                ((OidnBinaryDenoiser) denoiser).loadPath();
-
             try {
                 denoiser.denoiseDouble(scene.width, scene.height, sampleBuffer,
                         buffers[0], buffers[1], sampleBuffer);

@@ -1,6 +1,7 @@
 package de.lemaik.chunky.denoiser;
 
 import io.github.ThatRedox.OidnJna.OpenImageDenoise;
+import se.llbit.chunky.PersistentSettings;
 import se.llbit.chunky.Plugin;
 import se.llbit.chunky.main.Chunky;
 import se.llbit.chunky.main.ChunkyOptions;
@@ -16,11 +17,8 @@ public class DenoiserPlugin implements Plugin {
 
     @Override
     public void attach(Chunky chunky) {
-        OpenImageDenoise openImageDenoise = new OpenImageDenoise("C:\\Users\\co2c6\\Documents\\oidn-1.3.0.x64.vc14.windows\\bin\\OpenImageDenoise.dll");
-
         DenoiserSettings settings = new DenoiserSettings();
-//        Denoiser denoiser = new OidnBinaryDenoiser();
-        Denoiser denoiser = new OidnJnaDenoiser(openImageDenoise);
+        Denoiser denoiser = new OidnJnaDenoiser(PersistentSettings.settings.getString("oidnPath", ""));
 
         DenoisedPathTracingRenderer denoisedPathTracer = new DenoisedPathTracingRenderer(
                 settings, denoiser,

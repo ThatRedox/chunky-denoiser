@@ -20,13 +20,14 @@ public class DenoisedPathTracingPreviewRenderer extends MultiPassRenderer {
     protected final RayTracer tracer;
 
     protected final AlbedoTracer albedoTracer = new AlbedoTracer();
-    protected final NormalTracer normalTracer = new NormalTracer();
+    protected final NormalTracer normalTracer;
 
     public DenoisedPathTracingPreviewRenderer(DenoiserSettings settings, Denoiser denoiser,
                                               String id, String name, String description, RayTracer tracer) {
         this.settings = settings;
-        this.normalTracer.settings = settings;
         this.denoiser = denoiser;
+
+        this.normalTracer = new NormalTracer(settings);
 
         this.id = id;
         this.name = name;
@@ -51,9 +52,6 @@ public class DenoisedPathTracingPreviewRenderer extends MultiPassRenderer {
 
     @Override
     public void render(DefaultRenderManager manager) throws InterruptedException {
-        if (denoiser instanceof OidnBinaryDenoiser)
-            ((OidnBinaryDenoiser) denoiser).loadPath();
-
         TaskTracker.Task task = manager.getRenderTask();
         task.update("Preview", PREVIEW_SPP, 0, "");
 
@@ -80,6 +78,7 @@ public class DenoisedPathTracingPreviewRenderer extends MultiPassRenderer {
                 Arrays.setAll(sampleBuffer, i -> (double) denoised[i]);
             } catch (Denoiser.DenoisingFailedException e) {
                 Log.error("Failed to denoise", e);
+                break;
             }
 
             task.update(spp+1);

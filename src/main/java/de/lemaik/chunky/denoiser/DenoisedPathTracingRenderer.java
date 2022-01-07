@@ -20,15 +20,16 @@ public class DenoisedPathTracingRenderer extends MultiPassRenderer {
     protected final RayTracer tracer;
 
     protected final AlbedoTracer albedoTracer = new AlbedoTracer();
-    protected final NormalTracer normalTracer = new NormalTracer();
+    protected final NormalTracer normalTracer;
 
     private boolean hiddenPasses = false;
 
     public DenoisedPathTracingRenderer(DenoiserSettings settings, Denoiser denoiser,
                                        String id, String name, String description, RayTracer tracer) {
         this.settings = settings;
-        this.normalTracer.settings = settings;
         this.denoiser = denoiser;
+
+        this.normalTracer = new NormalTracer(settings);
 
         this.id = id;
         this.name = name;
@@ -108,9 +109,6 @@ public class DenoisedPathTracingRenderer extends MultiPassRenderer {
         }
 
         if (!aborted) {
-            if (denoiser instanceof OidnBinaryDenoiser)
-                ((OidnBinaryDenoiser) denoiser).loadPath();
-
             try {
                 denoiser.denoiseDouble(scene.width, scene.height, sampleBuffer,
                         buffers[0], buffers[1], sampleBuffer);
